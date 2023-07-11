@@ -39,9 +39,7 @@ function CountryDetails({navigation, route}: formTypes): JSX.Element {
   };
 
   useEffect(() => {
-    if (country) {
       getCountryDetails();
-    }
   }, [country]);
 
   const navigateToCapitalWeather = (capital: string) => {

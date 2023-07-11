@@ -1,48 +1,29 @@
 import React from 'react';
-import { mount, shallow, ShallowWrapper } from 'enzyme';
-import WeatherDetails from '../src/WeatherDetails';
-import MockAdapter from 'axios-mock-adapter';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react-native';
 import axios from 'axios';
+import CountryDetails from '../src/CountryDetails';
+import WeatherDetails from '../src/WeatherDetails';
 
-describe('WeatherDetails component', () => {
-  let wrapper: ShallowWrapper;
-  let mockAxios: MockAdapter;
+jest.mock('axios');
 
-  beforeEach(() => {
-    mockAxios = new MockAdapter(axios);
-    mockAxios.onGet().reply(200, {
+describe('CountryDetails', () => {
+  test('renders country details correctly', async () => {
+    const mockAxios = (axios.get as jest.Mock).mockImplementation(() =>
+    Promise.resolve({ data: {
       current: {
         temperature: '25',
-        weather_icons: ['http://example.com/icon.png'],
-        precip: '20',
-        wind_speed: '10',
+        precip: '10%',
+        weather_icons: ['https://example.com/icon.png'],
+        wind_speed: '15',
       },
-    });
-    wrapper = shallow(<WeatherDetails navigation={{}} route={{ params: { capital: 'London' } }} />);
-  });
+    }, })
+  );
+    const navigation = { navigate: jest.fn() };
+    const route = { params: { capital: 'dehli' } };
+    render(<WeatherDetails navigation={navigation} route={route} />);
 
-
-  beforeEach(() => {
-    wrapper = shallow(<WeatherDetails navigation={{}} route={{ params: { capital: 'London' } }} />);
+    await waitFor(() => screen.getByText('dehli'));
+    expect(screen.getByText('precipitation : 10%')).toBeTruthy();
   });
-  
-  afterEach(() => {
-    mockAxios.restore();
-  });
-
-  it('renders the capital name correctly', () => {
-    const capitalElement = wrapper.find('[data-testid="capital"]');
-    expect(capitalElement.props().children[1]).toEqual('London');
-  });
-  it('redners temprature correclty', () => {
-    const tempElement = wrapper.find('[data-testid="temp"]');
-    expect(tempElement.props().children[1]).toEqual('');
-  })
-
-  it("after mounting it should call api",() => {
-  
-    const wrapper = mount(<WeatherDetails navigation={{}} route={{ params: { capital: 'London' } }} />);
-    // console.log(wrapper.debug());
-   
-  })
 });
+
