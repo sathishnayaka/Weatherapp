@@ -8,56 +8,37 @@
     Text,
     useColorScheme,
   } from 'react-native';
-
-  import  WEATHER_API_KEY from "../config";
-
   type formTypes = {
     navigation : any;
     route : any;
   }
 
   const WeatherDetails = ({navigation,route}:formTypes) => {
-    const [temp, setTemp] = useState("");
-    const [weatherIcon, setWeatherIcon] = useState("");
-    const [precip, setPrecip] = useState("");
-    const [windSpeed, setWindSpeed] = useState("");
 
-    const { capital } = route.params;
+    const { capital, temperature , precip , weather_icons , wind_speed  } = route.params;
 
-    const getWeatherDetails = async() => {
-          const response =  await axios.get(
-              `http://api.weatherstack.com/current?access_key=${WEATHER_API_KEY}&query=${capital}`
-            );
-          console.log(response.data);
-          const { temperature , precip , weather_icons , wind_speed } = response.data.current;
-          setTemp(temperature);
-          setWeatherIcon(weather_icons[0]);
-          setPrecip(precip);
-          setWindSpeed(wind_speed);
-          
-    }
-
-  useEffect(()=>{
-      getWeatherDetails();
-  },[])
-
+    console.log(weather_icons,capital);
+  if(weather_icons){
     return (
       <SafeAreaView style={styles.sectionContainer}>
         <ImageBackground source={{uri : "https://cdn.dribbble.com/users/925716/screenshots/3333720/attachments/722375/night.png"}} resizeMode="cover" style={styles.image}>
         <Text data-testid="capital" style={styles.capitalText}> {capital}</Text>
-        <Text data-testid="temp" style={styles.temp} > {temp}&deg;C</Text>
+        <Text data-testid="temp" style={styles.temp} > {temperature}&deg;C</Text>
         <Image
           data-testid="weather-icon"
           style={styles.tinyLogo}
           source={{
-            uri: weatherIcon,
+            uri: weather_icons[0],
           }}
         />
-        <Text style={{color:'#fff', fontSize:20}}>Wind Speed : {windSpeed}KM/hr</Text>
+        <Text style={{color:'#fff', fontSize:20}}>Wind Speed : {wind_speed}KM/hr</Text>
         <Text style={{color:'#fff', fontSize:20}}> precipitation : {precip}</Text>
       </ImageBackground>
       </SafeAreaView>
     );
+  }else{
+    <Text>Loading</Text>
+  }
   }
 
   const styles = StyleSheet.create({

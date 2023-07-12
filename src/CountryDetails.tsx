@@ -9,8 +9,9 @@ import {
   Button,
   FlatList,
   Text,
+  Alert,
 } from 'react-native';
-
+import  WEATHER_API_KEY from "../config";
 type formTypes = {
   navigation: any;
   route: any;
@@ -42,8 +43,16 @@ function CountryDetails({navigation, route}: formTypes): JSX.Element {
       getCountryDetails();
   }, [country]);
 
-  const navigateToCapitalWeather = (capital: string) => {
-    navigation.navigate('capital-weather', { capital });
+  const navigateToCapitalWeather = async(capital: string) => {
+    try{
+      const response =  await axios.get(
+        `http://api.weatherstack.com/current?access_key=${WEATHER_API_KEY}&query=${capital}`
+      );
+    const { temperature , precip , weather_icons , wind_speed } = response.data.current;
+      navigation.navigate('capital-weather', { capital ,temperature , precip , weather_icons , wind_speed });
+    }catch(e){
+      console.log(e);
+    }
   };
 
   const renderItem = ({item}: {item:itemType}) => {
