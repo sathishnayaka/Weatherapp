@@ -9,9 +9,7 @@
     useColorScheme,
   } from 'react-native';
 
-  import {
-    Colors,
-  } from 'react-native/Libraries/NewAppScreen';
+  import  WEATHER_API_KEY from "../config";
 
   type formTypes = {
     navigation : any;
@@ -28,8 +26,9 @@
 
     const getWeatherDetails = async() => {
           const response =  await axios.get(
-              `http://api.weatherstack.com/current?access_key=6f6fd10b21078247ac9030d5cebe1908&query=${capital}`
+              `http://api.weatherstack.com/current?access_key=${WEATHER_API_KEY}&query=${capital}`
             );
+          console.log(response.data);
           const { temperature , precip , weather_icons , wind_speed } = response.data.current;
           setTemp(temperature);
           setWeatherIcon(weather_icons[0]);

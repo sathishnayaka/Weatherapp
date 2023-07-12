@@ -16,9 +16,7 @@ type formTypes = {
 
 function Form({navigation}: formTypes): JSX.Element {
   const [text, setText] = useState('');
-  const backgroundStyle = {
-    backgroundColor: Colors.darker,
-  };
+  
   const onPressSubmit = () => {
     navigation.navigate('country-details', {
       country: text,
@@ -30,7 +28,7 @@ function Form({navigation}: formTypes): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView >
       <View style={styles.sectionContainer}>
         <TextInput
           style={styles.input}
