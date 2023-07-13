@@ -16,9 +16,6 @@
   const WeatherDetails = ({navigation,route}:formTypes) => {
 
     const { capital, temperature , precip , weather_icons , wind_speed  } = route.params;
-
-    console.log(weather_icons,capital);
-  if(weather_icons){
     return (
       <SafeAreaView style={styles.sectionContainer}>
         <ImageBackground source={{uri : "https://cdn.dribbble.com/users/925716/screenshots/3333720/attachments/722375/night.png"}} resizeMode="cover" style={styles.image}>
@@ -36,9 +33,6 @@
       </ImageBackground>
       </SafeAreaView>
     );
-  }else{
-    <Text>Loading</Text>
-  }
   }
 
   const styles = StyleSheet.create({

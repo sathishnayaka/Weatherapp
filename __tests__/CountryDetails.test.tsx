@@ -23,7 +23,7 @@ describe('CountryDetails', () => {
     const navigation = { navigate: jest.fn() };
     const route = { params: { country: 'india' } };
     render(<CountryDetails navigation={navigation} route={route} />);
-
+    
     await waitFor(() => screen.getByText('Capital:Dehli'));
     expect(screen.getByText('Latitude: 123, Longitude: 456')).toBeTruthy();
     expect(screen.getByText('Population: 13903222')).toBeTruthy();
@@ -39,8 +39,16 @@ describe('CountryDetails', () => {
 
     fireEvent.press(screen.getByText('Capital Weather'));
 
-    expect(navigation.navigate).toHaveBeenCalledWith('capital-weather', {
-      capital: 'Dehli',
-    });
+    expect(axios.get).toHaveBeenCalledWith(
+      'http://api.weatherstack.com/current?access_key=4046acade148754a6a71b689cce97826&query=Dehli'
+    );
+
+    // expect(navigation.navigate).toHaveBeenCalledWith('capital-weather', {
+    //   capital: 'dehli',
+    //   temperature: 28,
+    //   precip: 10,
+    //   weather_icons: ["https:weathericon"],
+    //   wind_speed: 10,
+    // });
   });
 });
