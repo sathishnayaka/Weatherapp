@@ -32,11 +32,16 @@ function CountryDetails({navigation, route}: formTypes): JSX.Element {
   const {country} = route.params;
 
   const getCountryDetails = async () => {
-    const response = await axios.get(
-      `https://restcountries.com/v3.1/name/${country}`,
-    );
-    const data: itemType[]= response.data;
-    setCountryData(data);
+    try{
+      const response = await axios.get(
+        `https://restcountries.com/v3.1/name/${country}`,
+      );
+      const data: itemType[]= response.data;
+      setCountryData(data);
+    }catch(e:any){
+      console.log(e);
+      Alert.alert(e.message);
+    }
   };
 
   useEffect(() => {
@@ -45,13 +50,16 @@ function CountryDetails({navigation, route}: formTypes): JSX.Element {
 
   const navigateToCapitalWeather = async(capital: string) => {
     try{
+      console.log("capital weathr");
       const response =  await axios.get(
         `http://api.weatherstack.com/current?access_key=${WEATHER_API_KEY}&query=${capital}`
       );
+      console.log(response.data);
     const { temperature , precip , weather_icons , wind_speed } = response.data.current;
       navigation.navigate('capital-weather', { capital ,temperature , precip , weather_icons , wind_speed });
-    }catch(e){
+    }catch(e:any){
       console.log(e);
+      Alert.alert(e.message);
     }
   };
 
